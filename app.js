@@ -1,13 +1,20 @@
-require("dotenv").config();
 const path = require("path");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === "production") {
+  dotenv.config({ path: path.join(__dirname, ".env.production") });
+} else if (process.env.NODE_ENV === "development") {
+  dotenv.config();
+}
 
 const app = express();
 
