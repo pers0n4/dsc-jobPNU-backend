@@ -32,6 +32,15 @@ const userSchema = mongoose.Schema(
   }
 );
 
+userSchema.methods.verifyPassword = async function (password) {
+  try {
+    const user = await User.findById(this).select("password");
+    return await bcrypt.compare(password, user.password);
+  } catch (error) {
+    logger.warn(error.message);
+  }
+};
+
 userSchema.pre("save", function (next) {
   const user = this;
 
