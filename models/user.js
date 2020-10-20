@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
+const { logger } = require("../config/logger");
+
+const saltRounds = 10;
 
 const userSchema = mongoose.Schema(
   {
@@ -26,6 +31,28 @@ const userSchema = mongoose.Schema(
     },
   }
 );
+
+userSchema.pre("save", function (next) {
+  const user = this;
+
+  if (!user.isModified("password")) {
+    return next();
+  }
+
+  bcrypt
+    .genSalt(saltRounds)
+    .then((salt) => {
+      return bcrypt.hash(user.password, salt);
+    })
+    .then((hash) => {
+      user.password = hash;
+      next();
+    })
+    .catch((error) => {
+      logger.warn(error.message);
+      next();
+    });
+});
 
 const User = mongoose.model("User", userSchema);
 
