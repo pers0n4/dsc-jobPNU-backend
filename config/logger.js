@@ -1,5 +1,6 @@
 const { createLogger, config, format, transports } = require("winston");
 const morgan = require("morgan");
+require("dotenv").config();
 
 const consoleFormat = format.combine(
   format.colorize(),
@@ -30,22 +31,29 @@ const logger = createLogger({
       format: consoleFormat,
       handleExceptions: true,
     }),
+  ],
+  exitOnError: false,
+});
+
+if (process.env === "production" || process.env.FILE_LOGGING) {
+  logger.add(
     new transports.File({
       filename: "access.log",
       dirname: "logs",
       level: "info",
       format: fileFormat,
-    }),
+    })
+  );
+  logger.add(
     new transports.File({
       filename: "error.log",
       dirname: "logs",
       level: "error",
       format: fileFormat,
       handleExceptions: true,
-    }),
-  ],
-  exitOnError: false,
-});
+    })
+  );
+}
 
 // Object.entries(config.npm.colors).map(([level, color]) =>
 //   logger.log(level, color)
