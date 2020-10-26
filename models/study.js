@@ -14,5 +14,5 @@ var studySchema = mongoose.Schema({ // 1
 });
 
 // model & export
-var Post = mongoose.model('post', postSchema);
+var study = mongoose.model('study', studySchema);
 module.exports = Post;
