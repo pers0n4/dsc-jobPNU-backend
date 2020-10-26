@@ -1,4 +1,5 @@
 const path = require("path");
+const http = require("http");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -8,6 +9,7 @@ const { logger, morgan } = require("./config/logger");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
+// 환경변수 설정
 logger.debug("NODE_ENV=" + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "production") {
   require("dotenv").config({ path: path.join(__dirname, ".env.production") });
@@ -15,22 +17,23 @@ if (process.env.NODE_ENV === "production") {
   require("dotenv").config();
 }
 
+// Mongoose 연결
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000,
+});
+
+mongoose.connection
+  .on("error", (error) =>
+    logger.error("Mongoose connection failed: " + error.message)
+  )
+  .once("connected", () => logger.info("Mongoose connection successful"));
+
+// Express 생성
 const app = express();
-
-const connect = () => {
-  mongoose.connection
-    .on("error", () => logger.error("database connection error"))
-    .on("disconnected", connect)
-    .once("open", () => logger.info("database connection success"));
-  return mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  });
-};
-
-connect();
 
 app.use(morgan());
 app.use(express.json());
@@ -41,4 +44,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
-module.exports = app;
+app.set("port", process.env.PORT || 3000);
+
+// Express 서버 시작
+const server = http.createServer(app);
+
+server.listen(app.get("port"));
+server.on("error", (error) => {
+  logger.error(error.message);
+});
+server.on("listening", () => {
+  logger.info("Express server listening on " + app.get("port"));
+});

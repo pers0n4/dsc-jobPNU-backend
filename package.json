@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./bin/www",
-    "serve": "cross-env NODE_ENV=production node ./bin/www",
+    "start": "cross-env NODE_ENV=development node app.js",
+    "serve": "cross-env NODE_ENV=production node app.js",
     "format": "prettier --write '**/*.js'"
   },
   "dependencies": {
