@@ -2,6 +2,7 @@ const path = require("path");
 const http = require("http");
 
 const express = require("express");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const { logger, morgan } = require("./config/logger");
@@ -36,6 +37,7 @@ mongoose.connection
 const app = express();
 
 app.use(morgan());
+app.use(cors({ origin: /^(https?:\/\/)?(localhost)(:8080)?\/?$/ }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
