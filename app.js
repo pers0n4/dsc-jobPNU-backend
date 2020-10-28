@@ -8,6 +8,7 @@ const { logger, morgan } = require("./config/logger");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const studiesRouter = require("./routes/studies");
 
 logger.debug("NODE_ENV=" + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "production") {
@@ -41,5 +42,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/studies", studiesRouter);
 
 module.exports = app;

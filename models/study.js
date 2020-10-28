@@ -1,9 +1,9 @@
 // models/study.js
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 // schema
-var studySchema = mongoose.Schema({ // 1
+const studySchema = mongoose.Schema({ // 1
   title:{type:String, required:true},
   field:{type:String, required:true},
   num:{type:Number,required:true},
@@ -14,5 +14,6 @@ var studySchema = mongoose.Schema({ // 1
 });
 
 // model & export
-var study = mongoose.model('study', studySchema);
-module.exports = Post;
+const Study = mongoose.model("study", studySchema);
+
+module.exports = Study;
