@@ -11,12 +11,19 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
 // 환경변수 설정
-logger.debug("NODE_ENV=" + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "production") {
-  require("dotenv").config({ path: path.join(__dirname, ".env.production") });
+  require("dotenv").config({
+    path: path.resolve(process.cwd(), ".env.production"),
+  });
 } else if (process.env.NODE_ENV === "development") {
-  require("dotenv").config();
+  require("dotenv").config({
+    path: path.resolve(process.cwd(), ".env.development"),
+    debug: true,
+  });
 }
+logger.debug("NODE_ENV=" + process.env.NODE_ENV);
+logger.debug("MONGO_URI=" + process.env.MONGO_URI);
+logger.debug("FRONT_URI=" + process.env.FRONT_URI);
 
 // Mongoose 연결
 mongoose.connect(process.env.MONGO_URI, {
@@ -37,7 +44,11 @@ mongoose.connection
 const app = express();
 
 app.use(morgan());
-app.use(cors({ origin: /^(https?:\/\/)?(localhost)(:8080)?\/?$/ }));
+app.use(
+  cors({
+    origin: new RegExp(`^(https?:\/\/)(${process.env.FRONT_URI})(:\\d+)?\/?$`),
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

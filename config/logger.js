@@ -3,7 +3,9 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const consoleFormat = format.combine(
-  format.colorize(),
+  process.env.NODE_ENV === "production"
+    ? format.uncolorize()
+    : format.colorize(),
   format.timestamp({ format: "isoDateTime" }),
   format.printf(
     ({ level, message, timestamp, durationMs }) =>
@@ -35,7 +37,7 @@ const logger = createLogger({
   exitOnError: false,
 });
 
-if (process.env === "production" || process.env.FILE_LOGGING) {
+if (process.env.NODE_ENV === "production" || process.env.FILE_LOGGING) {
   logger.add(
     new transports.File({
       filename: "access.log",
@@ -107,7 +109,9 @@ module.exports = {
     // short:    :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms
     // tiny:     :method :url :status :res[content-length] - :response-time ms
     morgan(
-      `:remote-addr - ":method \x1b[95m:url\x1b[0m HTTP/:http-version" :status \x1b[35m:res[content-length]\x1b[0m - \x1b[33m:response-time ms\x1b[0m ":referrer" ":user-agent"`,
+      process.env.NODE_ENV === "production"
+        ? `:remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] - :response-time ms ":referrer" ":user-agent"`
+        : `:remote-addr - ":method \x1b[95m:url\x1b[0m HTTP/:http-version" :status \x1b[35m:res[content-length]\x1b[0m - \x1b[33m:response-time ms\x1b[0m ":referrer" ":user-agent"`,
       { stream }
     ),
 };
