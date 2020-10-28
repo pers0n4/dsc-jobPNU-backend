@@ -2,7 +2,6 @@ const path = require("path");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const { logger, morgan } = require("./config/logger");
 
@@ -12,9 +11,9 @@ const studiesRouter = require("./routes/studies");
 
 logger.debug("NODE_ENV=" + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "production") {
-  dotenv.config({ path: path.join(__dirname, ".env.production") });
+  require("dotenv").config({ path: path.join(__dirname, ".env.production") });
 } else if (process.env.NODE_ENV === "development") {
-  dotenv.config();
+  require("dotenv").config();
 }
 
 const app = express();

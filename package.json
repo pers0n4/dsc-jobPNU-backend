@@ -8,6 +8,7 @@
     "format": "prettier --write '**/*.js'"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
     "cross-env": "^7.0.2",
     "debug": "^4.2.0",
