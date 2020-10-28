@@ -1,9 +1,12 @@
-.git
-.gitignore
-node_modules
+.git/
+.github/
 
-.commitlint*
+node_modules/
+logs/
+
+.commitlintrc.json
 .prettier*
 
-.idea
-.vscode
+.idea/
+.vscode/
+.history/
