@@ -9,6 +9,7 @@ const { logger, morgan } = require("./config/logger");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
 
 // 환경변수 설정
 if (process.env.NODE_ENV === "production") {
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 
 app.set("port", process.env.PORT || 3000);
 
