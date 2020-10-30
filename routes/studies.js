@@ -13,22 +13,17 @@ router.post("/", (req, res) => {
     .catch((error) => {
       res.status(400).send(error.message);
     });
-});//users.js베낌
-
-// New
-router.get('/new', function(req, res){
-  res.render('study/new');
 });
 
-// // create
-// router.post('/', function(req, res){
-//   Post.create(req.body, function(err, post){
-//     if(err) return res.json(err);
-//     res.redirect('/studies');
-//   });
-// });
+// New
+router.get("/", async (req, res) => {
+  const studies = await Study.find();
+  res.status(200).json(studies);
+});
 
-// // show
+
+
+// show
 // router.get('/:id', function(req, res){
 //   Post.findOne({_id:req.params.id}, function(err, post){
 //     if(err) return res.json(err);
@@ -36,29 +31,6 @@ router.get('/new', function(req, res){
 //   });
 // });
 
-// // edit
-// router.get('/:id/edit', function(req, res){
-//   Post.findOne({_id:req.params.id}, function(err, post){
-//     if(err) return res.json(err);
-//     res.render('studies/edit', {post:post});
-//   });
-// });
 
-// // update
-// router.put('/:id', function(req, res){
-//   req.body.updatedAt = Date.now(); //2
-//   Post.findOneAndUpdate({_id:req.params.id}, req.body, function(err, post){
-//     if(err) return res.json(err);
-//     res.redirect("/studies/"+req.params.id);
-//   });
-// });
-
-// // destroy
-// router.delete('/:id', function(req, res){
-//   Post.deleteOne({_id:req.params.id}, function(err){
-//     if(err) return res.json(err);
-//     res.redirect('/studies');
-//   });
-// });
 
 module.exports = router;
