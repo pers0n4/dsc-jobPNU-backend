@@ -6,6 +6,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const { logger, morgan } = require("./config/logger");
+const passport = require("passport");
+const { localStrategy, jwtStrategy } = require("./config/passport");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -45,6 +47,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(passport.initialize());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
