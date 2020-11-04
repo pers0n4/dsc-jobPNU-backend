@@ -28,7 +28,15 @@ router.get("/:_id", (req, res) => {
     });
 });
 
+router.put("/", (req, res) => {
+  res.sendStatus(405);
+});
+
 router.patch("/", (req, res) => {
+  res.sendStatus(405);
+});
+
+router.put("/:_id", (req, res) => {
   res.sendStatus(405);
 });
 
