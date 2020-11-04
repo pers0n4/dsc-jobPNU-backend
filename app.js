@@ -40,7 +40,9 @@ const app = express();
 app.use(morgan());
 app.use(
   cors({
-    origin: new RegExp(`^(https?:\/\/)(${process.env.FRONT_URI})(:\\d+)?\/?$`),
+    origin: new RegExp(
+      `^(https?:\/\/)(localhost|${process.env.FRONT_URI})(:\\d+)?\/?$`
+    ),
   })
 );
 app.use(express.json());
