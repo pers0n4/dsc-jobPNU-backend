@@ -5,6 +5,36 @@ require("../config/env");
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /auth:
+ *  post:
+ *    tags:
+ *      - auth
+ *    summary: Authenticate
+ *    operationId: createToken
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                format: email
+ *              password:
+ *                type: string
+ *                format: password
+ *                example: password
+ *            required:
+ *              - email
+ *              - password
+ *    responses:
+ *      200:
+ *        description: jwt token
+ *      401:
+ *        description: authenticate fail
+ */
 router.post("/", async (req, res, next) => {
   passport.authenticate("local", async (error, user, info) => {
     try {
@@ -29,6 +59,22 @@ router.post("/", async (req, res, next) => {
   })(req, res, next);
 });
 
+/**
+ * @openapi
+ * /auth:
+ *  get:
+ *    tags:
+ *      - auth
+ *    summary: Verify jwt token
+ *    operationId: verifyToken
+ *    responses:
+ *      200:
+ *        description: verified user
+ *      401:
+ *        description: authenticate fail
+ *    security:
+ *      - jwtToken: []
+ */
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
