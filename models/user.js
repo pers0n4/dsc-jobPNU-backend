@@ -63,6 +63,17 @@ userSchema.pre("save", function (next) {
     });
 });
 
+userSchema.options.toJSON = {
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+
+    ret = { id: ret.id, ...ret };
+    return ret;
+  },
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
