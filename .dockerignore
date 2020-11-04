@@ -6,6 +6,7 @@ logs/
 
 .commitlintrc.json
 .prettier*
+nodemon.json
 
 .idea/
 .vscode/
