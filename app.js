@@ -12,16 +12,7 @@ const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 
 // 환경변수 설정
-if (process.env.NODE_ENV === "production") {
-  require("dotenv").config({
-    path: path.resolve(process.cwd(), ".env.production"),
-  });
-} else if (process.env.NODE_ENV === "development") {
-  require("dotenv").config({
-    path: path.resolve(process.cwd(), ".env.development"),
-    debug: true,
-  });
-}
+require("./config/env");
 logger.debug("NODE_ENV=" + process.env.NODE_ENV);
 logger.debug("MONGO_URI=" + process.env.MONGO_URI);
 logger.debug("FRONT_URI=" + process.env.FRONT_URI);
