@@ -9,7 +9,7 @@ const { logger, morgan } = require("./config/logger");
 const passport = require("passport");
 const { localStrategy, jwtStrategy } = require("./config/passport");
 
-const indexRouter = require("./routes/index");
+const swaggerRouter = require("./routes/swagger");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 
@@ -54,7 +54,7 @@ app.use(passport.initialize());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use("/", indexRouter);
+app.use("/", swaggerRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 
