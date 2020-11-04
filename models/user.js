@@ -41,26 +41,12 @@ userSchema.methods.verifyPassword = async function (password) {
   }
 };
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", async function (next) {
   const user = this;
-
-  if (!user.isModified("password")) {
-    return next();
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, saltRounds);
   }
-
-  bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => {
-      return bcrypt.hash(user.password, salt);
-    })
-    .then((hash) => {
-      user.password = hash;
-      next();
-    })
-    .catch((error) => {
-      logger.warn(error.message);
-      next();
-    });
+  next();
 });
 
 userSchema.options.toJSON = {
