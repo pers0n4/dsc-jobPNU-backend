@@ -49,7 +49,7 @@ router.delete("/", (req, res) => {
 router.delete("/:_id", (req, res) => {
   User.findByIdAndDelete(req.params._id)
     .then(() => {
-      res.sendStatus(200);
+      res.sendStatus(204);
     })
     .catch((error) => {
       res.status(404).send(error.message);
