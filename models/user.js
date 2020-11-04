@@ -49,16 +49,16 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.options.toJSON = {
-  transform(doc, ret, options) {
+userSchema.set("toJSON", {
+  transform: function (doc, ret) {
     ret.id = ret._id;
     delete ret._id;
-    delete ret.__v;
 
     ret = { id: ret.id, ...ret };
     return ret;
   },
-};
+  versionKey: false,
+});
 
 const User = mongoose.model("User", userSchema);
 
