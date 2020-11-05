@@ -152,7 +152,15 @@ router.put("/:id", (req, res) => {
  *      content:
  *        application/json:
  *          schema:
- *            $ref: "#/components/schemas/User"
+ *            type: object
+ *            properties:
+ *              password:
+ *                type: string
+ *                format: password
+ *                example: password
+ *              name:
+ *                type: string
+ *                example: name
  *    responses:
  *      200:
  *        description: updated user
