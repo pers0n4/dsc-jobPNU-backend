@@ -49,6 +49,15 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre("findOneAndUpdate", async function () {
+  if (this._update.password) {
+    this._update.password = await bcrypt.hash(
+      this._update.password,
+      saltRounds
+    );
+  }
+});
+
 userSchema.set("toJSON", {
   transform: function (doc, ret) {
     ret.id = ret._id;
