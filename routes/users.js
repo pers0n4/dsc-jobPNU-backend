@@ -29,6 +29,7 @@ const User = require("../models/user");
  *    tags:
  *      - user
  *    summary: Create user
+ *    operationId: createUser
  *    requestBody:
  *      description: user to create
  *      required: true
@@ -63,6 +64,7 @@ router.post("/", (req, res) => {
  *    tags:
  *      - user
  *    summary: Get all users
+ *    operationId: getUsers
  *    responses:
  *      200:
  *        description: all users
@@ -101,6 +103,7 @@ router.post("/:id", (req, res) => {
  *    tags:
  *      - user
  *    summary: Find user
+ *    operationId: findUser
  *    parameters:
  *      - name: id
  *        in: path
@@ -141,6 +144,7 @@ router.put("/:id", (req, res) => {
  *    tags:
  *      - user
  *    summary: Update user
+ *    operationId: updateUser
  *    parameters:
  *      - name: id
  *        in: path
@@ -190,6 +194,7 @@ router.patch("/:id", (req, res) => {
  *    tags:
  *      - user
  *    summary: Delete user
+ *    operationId: deleteUser
  *    parameters:
  *      - name: id
  *        in: path

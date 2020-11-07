@@ -11,7 +11,7 @@ require("../config/env");
  *  post:
  *    tags:
  *      - auth
- *    summary: Authenticate
+ *    summary: Create token
  *    operationId: createToken
  *    requestBody:
  *      content:
@@ -65,7 +65,7 @@ router.post("/", async (req, res, next) => {
  *  get:
  *    tags:
  *      - auth
- *    summary: Verify jwt token
+ *    summary: Verify token
  *    operationId: verifyToken
  *    responses:
  *      200:
