@@ -32,8 +32,8 @@ name: Deploy to Amazon ECS
 
 jobs:
   deploy:
-    name: Deploy
     if: ${{ github.repository }} == "pers0n4/dsc-jobPNU-backend"
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
