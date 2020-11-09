@@ -11,6 +11,7 @@ const { localStrategy, jwtStrategy } = require("./config/passport");
 
 const swaggerRouter = require("./routes/swagger");
 const usersRouter = require("./routes/users");
+const studiesRouter = require("./routes/studies");
 const authRouter = require("./routes/auth");
 
 // 환경변수 설정
@@ -56,6 +57,7 @@ passport.use(jwtStrategy);
 
 app.use("/", swaggerRouter);
 app.use("/users", usersRouter);
+app.use("/studies", studiesRouter);
 app.use("/auth", authRouter);
 
 app.set("port", process.env.PORT || 3000);

@@ -50,7 +50,7 @@ const User = require("../models/user");
 router.post("/", (req, res) => {
   User.create(req.body)
     .then((user) => {
-      res.status(201).json(user);
+      res.sendStatus(201);
     })
     .catch((error) => {
       res.status(400).send(error.message);
