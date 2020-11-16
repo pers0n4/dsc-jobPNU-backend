@@ -21,12 +21,15 @@ router.get("/", async (req, res) => {
   res.status(200).json(studies);
 });
 
-// show
-// router.get('/:id', function(req, res){
-//   Post.findOne({_id:req.params.id}, function(err, post){
-//     if(err) return res.json(err);
-//     res.render('studies/show', {post:post});
-//   });
-// });
+//leader
+router.get('/:id', function(req, res){
+  Post.findOne({_id:req.params.id}, function(err, post){
+    if(err) return res.json(err);
+    res.status(400).send(error.message);
+  });
+});
+
+//members
+
 
 module.exports = router;
