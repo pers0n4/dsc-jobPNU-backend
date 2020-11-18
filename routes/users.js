@@ -218,4 +218,80 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+/**
+ * @openapi
+ * /users/{id}/ratings:
+ *  post:
+ *    tags:
+ *      - user
+ *    summary: Rate user
+ *    operationId: rateUser
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        description: user id
+ *        required: true
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              user:
+ *                description: user id
+ *                type: string
+ *                example: id
+ *              rating:
+ *                type: number
+ *                example: 5
+ *    responses:
+ *      201:
+ *        description: user rated
+ *      404:
+ *        description: user not found
+ */
+router.post("/:id/ratings", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.rate(req.body.user, req.body.rating);
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
+/**
+ * @openapi
+ * /users/{id}/rating:
+ *  get:
+ *    tags:
+ *      - user
+ *    summary: Get user rating
+ *    operationId: userRating
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: user rating
+ *      404:
+ *        description: user not found
+ */
+router.get("/:id/rating", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      res.status(200).send(user.rating);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
 module.exports = router;
