@@ -83,4 +83,38 @@ router.get(
   }
 );
 
+/**
+ * @openapi
+ * /auth/refresh:
+ *  post:
+ *    tags:
+ *      - auth
+ *    summary: Refresh token
+ *    operationId: refreshToken
+ *    responses:
+ *      200:
+ *        description: JWT token
+ *      401:
+ *        description: Unauthorized
+ *    security:
+ *      - jwtToken: []
+ */
+router.post(
+  "/refresh",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    req.login(req.user, { session: false }, async (error) => {
+      if (error) {
+        return next(error);
+      }
+
+      const token = jwt.sign(req.user.toJSON(), process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      res.status(200).json({ token });
+    });
+  }
+);
+
 module.exports = router;
