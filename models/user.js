@@ -5,6 +5,16 @@ const { logger } = require("../config/logger");
 
 const saltRounds = 10;
 
+const userRatingSchema = new mongoose.Schema({
+  _user: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "User",
+  },
+  rating: {
+    type: Number,
+  },
+});
+
 const userSchema = mongoose.Schema(
   {
     email: {
@@ -24,6 +34,9 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    ratings: {
+      type: [userRatingSchema],
+    },
   },
   {
     timestamps: {
@@ -41,6 +54,21 @@ userSchema.methods.verifyPassword = async function (password) {
     logger.warn(error.message);
   }
 };
+
+userSchema.methods.rate = function (user, rating) {
+  this.ratings.push({ _user: user, rating });
+  return this.save();
+};
+
+userSchema.virtual("rating").get(function () {
+  try {
+    const ratings = this.ratings.map((r) => r.rating);
+    const average = ratings.reduce((acc, cur) => acc + cur) / ratings.length;
+    return average.toFixed(2);
+  } catch (error) {
+    return "0";
+  }
+});
 
 userSchema.pre("save", async function (next) {
   const user = this;
@@ -60,9 +88,12 @@ userSchema.pre("findOneAndUpdate", async function () {
 });
 
 userSchema.set("toJSON", {
+  gettes: true,
+  virtuals: true,
   transform: function (doc, ret) {
     ret.id = ret._id;
     delete ret._id;
+    delete ret.ratings;
 
     ret = { id: ret.id, ...ret };
     return ret;

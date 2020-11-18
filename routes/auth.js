@@ -31,9 +31,9 @@ require("../config/env");
  *              - password
  *    responses:
  *      200:
- *        description: jwt token
+ *        description: JWT token
  *      401:
- *        description: authenticate fail
+ *        description: Unauthorized
  */
 router.post("/", async (req, res, next) => {
   passport.authenticate("local", async (error, user, info) => {
@@ -69,9 +69,9 @@ router.post("/", async (req, res, next) => {
  *    operationId: verifyToken
  *    responses:
  *      200:
- *        description: verified user
+ *        description: Verified User
  *      401:
- *        description: authenticate fail
+ *        description: Unauthorized
  *    security:
  *      - jwtToken: []
  */
@@ -80,6 +80,40 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     res.status(200).json(req.user);
+  }
+);
+
+/**
+ * @openapi
+ * /auth/refresh:
+ *  post:
+ *    tags:
+ *      - auth
+ *    summary: Refresh token
+ *    operationId: refreshToken
+ *    responses:
+ *      200:
+ *        description: JWT token
+ *      401:
+ *        description: Unauthorized
+ *    security:
+ *      - jwtToken: []
+ */
+router.post(
+  "/refresh",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    req.login(req.user, { session: false }, async (error) => {
+      if (error) {
+        return next(error);
+      }
+
+      const token = jwt.sign(req.user.toJSON(), process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      res.status(200).json({ token });
+    });
   }
 );
 

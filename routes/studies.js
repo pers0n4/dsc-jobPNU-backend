@@ -1,10 +1,10 @@
 // routes/studies.js
 
-const express  = require('express');
+const express = require("express");
 const router = express.Router();
-const Study = require('../models/study');
+const Study = require("../models/study");
 
-// Index 
+// Index
 router.post("/", (req, res) => {
   Study.create(req.body)
     .then((study) => {
@@ -21,8 +21,6 @@ router.get("/", async (req, res) => {
   res.status(200).json(studies);
 });
 
-
-
 // show
 // router.get('/:id', function(req, res){
 //   Post.findOne({_id:req.params.id}, function(err, post){
@@ -30,7 +28,5 @@ router.get("/", async (req, res) => {
 //     res.render('studies/show', {post:post});
 //   });
 // });
-
-
 
 module.exports = router;

@@ -26,12 +26,13 @@
 on:
   push:
     branches:
-      - develop
+      - main
 
 name: Deploy to Amazon ECS
 
 jobs:
   deploy:
+    if: ${{ github.repository }} == "pers0n4/dsc-jobPNU-backend"
     name: Deploy
     runs-on: ubuntu-latest
 

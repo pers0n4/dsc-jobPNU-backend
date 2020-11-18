@@ -10,20 +10,82 @@ on:
 
 jobs:
   lint:
+    # if: ${{ github.repository }} == "pers0n4/dsc-jobPNU-backend"
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          # - windows-latest
+        node:
+          - 14
+          - 12
+        # include:
+        #   - os: macos-latest
+        #     node: 12
+        # exclude:
+        #   - os: windows-latest
+        #     node: 14
+    timeout-minutes: 10
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+        persist-credentials: false
 
     - name: Setup Node.js
       uses: actions/setup-node@v2.1.2
       with:
-        node-version: "12"
+        node-version: ${{ matrix.node }}
 
     - name: Install dependencies
       run: npm ci
 
     - name: Run Prettier
       run: npm run format
+
+  # format:
+  #   if: ${{ github.repository }} == "pers0n4/dsc-jobPNU-backend"
+  #   name: Format
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #     with:
+  #       ref: ${{ github.head_ref }}
+  #       persist-credentials: false
+
+  #   - name: Setup Node.js
+  #     uses: actions/setup-node@v2.1.2
+  #     with:
+  #       node-version: 12
+
+  #   - name: Import GPG key
+  #     uses: crazy-max/ghaction-import-gpg@v3
+  #     with:
+  #       gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+  #       passphrase: ${{ secrets.GPG_PASSPHRASE }}
+  #       git-user-signingkey: true
+  #       git-commit-gpgsign: true
+
+  #   - name: Install dependencies
+  #     run: npm ci
+
+  #   - name: Check modified files
+  #     id: git-check
+  #     run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+
+  #   - name: Push changes
+  #     if: steps.git-check.outputs.modified == 'true'
+  #     run: |
+  #       git config --global user.name "Dong-Young Kim"
+  #       git config --global user.email "31337.persona@gmail.com"
+  #       git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+  #       git add .
+  #       git commit -S -m "style: format code"
+  #       git push
