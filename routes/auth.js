@@ -31,9 +31,9 @@ require("../config/env");
  *              - password
  *    responses:
  *      200:
- *        description: jwt token
+ *        description: JWT token
  *      401:
- *        description: authenticate fail
+ *        description: Unauthorized
  */
 router.post("/", async (req, res, next) => {
   passport.authenticate("local", async (error, user, info) => {
@@ -69,9 +69,9 @@ router.post("/", async (req, res, next) => {
  *    operationId: verifyToken
  *    responses:
  *      200:
- *        description: verified user
+ *        description: Verified User
  *      401:
- *        description: authenticate fail
+ *        description: Unauthorized
  *    security:
  *      - jwtToken: []
  */
