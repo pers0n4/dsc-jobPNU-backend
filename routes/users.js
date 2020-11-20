@@ -31,7 +31,7 @@ const User = require("../models/user");
  *    summary: Create user
  *    operationId: createUser
  *    requestBody:
- *      description: user to create
+ *      description: User to create
  *      required: true
  *      content:
  *        application/json:
@@ -39,13 +39,13 @@ const User = require("../models/user");
  *            $ref: "#/components/schemas/User"
  *    responses:
  *      201:
- *        description: created user
+ *        description: Created user
  *        content:
  *          application/json:
  *            schema:
  *              $ref: "#/components/schemas/User"
  *      400:
- *        description: bad request
+ *        description: Bad request
  */
 router.post("/", (req, res) => {
   User.create(req.body)
@@ -67,7 +67,7 @@ router.post("/", (req, res) => {
  *    operationId: getUsers
  *    responses:
  *      200:
- *        description: all users
+ *        description: All users
  *        content:
  *          application/json:
  *            schema:
@@ -113,7 +113,7 @@ router.post("/:id", (req, res) => {
  *          type: string
  *    responses:
  *      200:
- *        description: found user
+ *        description: Found user
  *        content:
  *          application/json:
  *            schema:
@@ -121,7 +121,7 @@ router.post("/:id", (req, res) => {
  *              items:
  *                $ref: "#/components/schemas/User"
  *      404:
- *        description: user not found
+ *        description: Not Found
  */
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
@@ -167,7 +167,7 @@ router.put("/:id", (req, res) => {
  *                example: name
  *    responses:
  *      200:
- *        description: updated user
+ *        description: Updated user
  *        content:
  *          application/json:
  *            schema:
@@ -175,7 +175,7 @@ router.put("/:id", (req, res) => {
  *              items:
  *                $ref: "#/components/schemas/User"
  *      404:
- *        description: user not found
+ *        description: Not Found
  */
 router.patch("/:id", (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -204,14 +204,90 @@ router.patch("/:id", (req, res) => {
  *          type: string
  *    responses:
  *      204:
- *        description: user deleted
+ *        description: Successfully delete user
  *      404:
- *        description: user not found
+ *        description: Not Found
  */
 router.delete("/:id", (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(() => {
       res.sendStatus(204);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
+/**
+ * @openapi
+ * /users/{id}/ratings:
+ *  post:
+ *    tags:
+ *      - user
+ *    summary: Rate user
+ *    operationId: rateUser
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        description: user id
+ *        required: true
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              user:
+ *                description: user id
+ *                type: string
+ *                example: id
+ *              rating:
+ *                type: number
+ *                example: 5
+ *    responses:
+ *      201:
+ *        description: Successfully rate user
+ *      404:
+ *        description: Not Found
+ */
+router.post("/:id/ratings", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      user.rate(req.body.user, req.body.rating);
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
+/**
+ * @openapi
+ * /users/{id}/rating:
+ *  get:
+ *    tags:
+ *      - user
+ *    summary: Get user rating
+ *    operationId: userRating
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: User rating
+ *      404:
+ *        description: Not Found
+ */
+router.get("/:id/rating", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      res.status(200).send(user.rating);
     })
     .catch((error) => {
       res.status(404).send(error.message);
