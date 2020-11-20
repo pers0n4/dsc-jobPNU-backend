@@ -21,12 +21,27 @@ router.get("/", async (req, res) => {
   res.status(200).json(studies);
 });
 
-// show
-// router.get('/:id', function(req, res){
-//   Post.findOne({_id:req.params.id}, function(err, post){
-//     if(err) return res.json(err);
-//     res.render('studies/show', {post:post});
-//   });
-// });
+//leader
+router.get('/:id', function(req, res){
+  Study.findById(req.params.id)
+    .then((study) => {
+      res.status(200).json(study);
+    })
+});   
+
+
+//members
+router.post("/:id/members", (req, res) => {
+  Study.findById(req.params.id)
+    .then((study) => {
+      study.mem(req.body.member);
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
+
 
 module.exports = router;
