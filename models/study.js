@@ -2,27 +2,29 @@
 
 const mongoose = require('mongoose');
 
-// const pointSchema = mongoose.Schema({
-//   type: {
-//     type: String,
-//     enum: ['Point'],
-//     required: true
-//   },
-//   coordinates: {
-//     type: [Number],
-//     required: true
-//   }
-// });
+const pointSchema = mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});
 //member
 const memberSchema = mongoose.Schema({
-  member : {type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true}
+  _member : {type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true}
 });
+
 
 // schema
 const studySchema = mongoose.Schema({ // 1
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },
   title:{type:String, required:true},
   field:{type:String, required:true},
+  location:{type: pointSchema,required:true},
   num:{type:Number,required:true},
   content:{type:String},
   start_date:{type:Date,required:true},
@@ -32,7 +34,10 @@ const studySchema = mongoose.Schema({ // 1
   members : {type:[memberSchema]}
 });
 
-
+studySchema.methods.mem = function (member) {
+  this.members.push({ _member: member});
+  return this.save();
+};
 
 // model & export
 const Study = mongoose.model("study", studySchema);

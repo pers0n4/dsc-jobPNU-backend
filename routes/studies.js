@@ -23,13 +23,25 @@ router.get("/", async (req, res) => {
 
 //leader
 router.get('/:id', function(req, res){
-  Post.findOne({_id:req.params.id}, function(err, post){
-    if(err) return res.json(err);
-    res.status(400).send(error.message);
-  });
-});
+  Study.findById(req.params.id)
+    .then((study) => {
+      res.status(200).json(study);
+    })
+});   
+
 
 //members
+router.post("/:id/members", (req, res) => {
+  Study.findById(req.params.id)
+    .then((study) => {
+      study.mem(req.body.member);
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
 
 
 module.exports = router;
