@@ -4,6 +4,13 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../models/user");
 
+const verifyUserIdentity = (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return res.sendStatus(401);
+  }
+  next();
+};
+
 /**
  * @openapi
  * components:
@@ -175,10 +182,14 @@ router.put("/:id", (req, res) => {
  *              type: array
  *              items:
  *                $ref: "#/components/schemas/User"
+ *      401:
+ *        description: Unauthorized
  *      404:
  *        description: Not Found
+ *    security:
+ *      - jwtToken: []
  */
-router.patch("/:id", (req, res) => {
+router.patch("/:id", verifyUserIdentity, (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((user) => {
       res.status(200).json(user);
@@ -206,18 +217,27 @@ router.patch("/:id", (req, res) => {
  *    responses:
  *      204:
  *        description: Successfully delete user
+ *      401:
+ *        description: Unauthorized
  *      404:
  *        description: Not Found
+ *    security:
+ *      - jwtToken: []
  */
-router.delete("/:id", (req, res) => {
-  User.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.sendStatus(204);
-    })
-    .catch((error) => {
-      res.status(404).send(error.message);
-    });
-});
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  verifyUserIdentity,
+  (req, res) => {
+    User.findByIdAndDelete(req.params.id)
+      .then(() => {
+        res.sendStatus(204);
+      })
+      .catch((error) => {
+        res.status(404).send(error.message);
+      });
+  }
+);
 
 /**
  * @openapi
