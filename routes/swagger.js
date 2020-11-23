@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
-
 const swaggerUi = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
+
+const router = express.Router();
 
 const swaggerSpec = swaggerJSDoc({
   swaggerDefinition: {
