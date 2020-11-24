@@ -271,19 +271,61 @@ router.delete(
  *    responses:
  *      201:
  *        description: Successfully rate user
+ *      204:
+ *        description: Successfully update user rating
+ *      401:
+ *        description: Unauthorized
  *      404:
  *        description: Not Found
+ *    security:
+ *      - jwtToken: []
  */
-router.post("/:id/ratings", (req, res) => {
-  User.findById(req.params.id)
-    .then((user) => {
-      user.rate(req.body.user, req.body.rating);
-      res.sendStatus(201);
-    })
-    .catch((error) => {
-      res.status(404).send(error.message);
-    });
-});
+router.post(
+  "/:id/ratings",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    // 본인 평가 제외
+    if (req.user.id === req.params.id) {
+      return res.sendStatus(202);
+    }
+
+    const condition = {
+      _id: req.params.id,
+      "ratings._user": req.user.id,
+    };
+
+    const user = await User.findOne(condition);
+
+    if (user) {
+      User.findOneAndUpdate(
+        condition,
+        {
+          $set: {
+            "ratings.$.rating": req.body.rating,
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((user) => {
+          res.sendStatus(204);
+        })
+        .catch((error) => {
+          res.status(404).send(error.message);
+        });
+    } else {
+      User.findById(req.params.id)
+        .then((user) => {
+          user.rate(req.user, req.body.rating);
+          res.sendStatus(201);
+        })
+        .catch((error) => {
+          res.status(404).send(error.message);
+        });
+    }
+  }
+);
 
 /**
  * @openapi
