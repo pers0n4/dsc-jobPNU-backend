@@ -72,7 +72,7 @@ const Study = require("../models/study");
  *            schema:
  *              $ref: "#/components/schemas/Study"
  *      400:
- *        description: Bad request
+ *        description: Bad Request
  */
 // Index
 router.post("/", (req, res) => {
@@ -131,7 +131,7 @@ router.get("/", async (req, res) => {
  *            schema:
  *              $ref: "#/components/schemas/Study"
  *      400:
- *        description: Not found
+ *        description: Not Found
  */
 //leader
 router.get("/:id", function (req, res) {
@@ -170,7 +170,7 @@ router.get("/:id", function (req, res) {
  *      202:
  *        description: Accepted
  *      404:
- *        description: Not found
+ *        description: Not Found
  */
 //members
 router.post("/:id/members", (req, res) => {

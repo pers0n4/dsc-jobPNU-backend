@@ -67,7 +67,7 @@ const verifyUserIdentity = (req, res, next) => {
  *            schema:
  *              $ref: "#/components/schemas/User"
  *      400:
- *        description: Bad request
+ *        description: Bad Request
  */
 router.post("/", (req, res) => {
   User.create(req.body)
@@ -145,7 +145,7 @@ router.post("/:id", (req, res) => {
  *              items:
  *                $ref: "#/components/schemas/User"
  *      404:
- *        description: Not found
+ *        description: Not Found
  */
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
@@ -194,7 +194,7 @@ router.put("/:id", (req, res) => {
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not found
+ *        description: Not Found
  *    security:
  *      - bearerAuth: []
  */
@@ -230,7 +230,7 @@ router.patch("/:id", verifyUserIdentity, (req, res) => {
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not found
+ *        description: Not Found
  *    security:
  *      - bearerAuth: []
  */
@@ -287,7 +287,7 @@ router.delete(
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not found
+ *        description: Not Found
  *    security:
  *      - bearerAuth: []
  */
@@ -358,7 +358,7 @@ router.post(
  *      200:
  *        description: Return user's rating
  *      404:
- *        description: Not found
+ *        description: Not Found
  */
 router.get("/:id/rating", (req, res) => {
   User.findById(req.params.id)
