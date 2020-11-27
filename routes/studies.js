@@ -34,8 +34,12 @@ router.get('/:id', function(req, res){
 router.post("/:id/members", (req, res) => {
   Study.findById(req.params.id)
     .then((study) => {
-      study.mem(req.body.member);
-      res.sendStatus(200);
+      console.log(study.members)
+      if(study.members.length < study.num){
+      study.mem(req.body.member,req.body.status);
+      res.sendStatus(201);
+      }
+      return res.status(202).send("인원을 초과하였습니다.")
     })
     .catch((error) => {
       res.status(404).send(error.message);
