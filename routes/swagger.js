@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
-
 const swaggerUi = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
+
+const router = express.Router();
 
 const swaggerSpec = swaggerJSDoc({
   swaggerDefinition: {
@@ -10,15 +10,7 @@ const swaggerSpec = swaggerJSDoc({
     info: {
       title: "DSC jobPNU Backend",
       version: "0.0.0",
-    },
-    components: {
-      securitySchemes: {
-        jwtToken: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "Bearer",
-        },
-      },
+      description: "API endpoints",
     },
   },
   apis: ["./routes/**/*.js"],
