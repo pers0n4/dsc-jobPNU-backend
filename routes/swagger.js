@@ -10,15 +10,7 @@ const swaggerSpec = swaggerJSDoc({
     info: {
       title: "DSC jobPNU Backend",
       version: "0.0.0",
-    },
-    components: {
-      securitySchemes: {
-        jwtToken: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "Bearer",
-        },
-      },
+      description: "API endpoints",
     },
   },
   apis: ["./routes/**/*.js"],

@@ -55,8 +55,8 @@ const Study = require("../models/study");
  * /studies:
  *  post:
  *    tags:
- *      - study
- *    summary: Create stude
+ *      - Study
+ *    summary: Create a study
  *    operationId: createStudy
  *    requestBody:
  *      required: true
@@ -90,7 +90,7 @@ router.post("/", (req, res) => {
  * /studies:
  *  get:
  *    tags:
- *      - study
+ *      - Study
  *    summary: Get all studies
  *    operationId: getStudies
  *    responses:
@@ -114,8 +114,8 @@ router.get("/", async (req, res) => {
  * /studies/{id}:
  *  get:
  *    tags:
- *      - study
- *    summary: Find study
+ *      - Study
+ *    summary: Find a study
  *    operationId: findStudy
  *    parameters:
  *      - name: id
@@ -145,8 +145,8 @@ router.get("/:id", function (req, res) {
  * /studies/{id}/members:
  *  post:
  *    tags:
- *      - study
- *    summary: Add member
+ *      - Study
+ *    summary: Add a member to study
  *    operationId: addMember
  *    parameters:
  *      - name: id

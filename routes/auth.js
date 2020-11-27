@@ -7,10 +7,20 @@ require("../config/env");
 
 /**
  * @openapi
+ * components:
+ *  securitySchemes:
+ *    bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+/**
+ * @openapi
  * /auth:
  *  post:
  *    tags:
- *      - auth
+ *      - Auth
  *    summary: Create token
  *    operationId: createToken
  *    requestBody:
@@ -64,7 +74,7 @@ router.post("/", async (req, res, next) => {
  * /auth:
  *  get:
  *    tags:
- *      - auth
+ *      - Auth
  *    summary: Verify token
  *    operationId: verifyToken
  *    responses:
@@ -73,7 +83,7 @@ router.post("/", async (req, res, next) => {
  *      401:
  *        description: Unauthorized
  *    security:
- *      - jwtToken: []
+ *      - bearerAuth: []
  */
 router.get(
   "/",
@@ -88,7 +98,7 @@ router.get(
  * /auth/refresh:
  *  post:
  *    tags:
- *      - auth
+ *      - Auth
  *    summary: Refresh token
  *    operationId: refreshToken
  *    responses:
@@ -97,7 +107,7 @@ router.get(
  *      401:
  *        description: Unauthorized
  *    security:
- *      - jwtToken: []
+ *      - bearerAuth: []
  */
 router.post(
   "/refresh",

@@ -16,18 +16,31 @@ const verifyUserIdentity = (req, res, next) => {
  * components:
  *  schemas:
  *    User:
+ *      description: A representation of a user
  *      type: object
  *      properties:
+ *        id:
+ *          type: string
+ *          description: User object id
+ *          readOnly: true
  *        email:
  *          type: string
  *          format: email
+ *          description: User email
  *        password:
  *          type: string
  *          format: password
+ *          description: User password
  *          example: password
+ *          writeOnly: true
  *        name:
  *          type: string
+ *          description: User name
  *          example: name
+ *        rating:
+ *          type: number
+ *          description: User rating
+ *          readOnly: true
  */
 
 /**
@@ -35,11 +48,12 @@ const verifyUserIdentity = (req, res, next) => {
  * /users:
  *  post:
  *    tags:
- *      - user
- *    summary: Create user
+ *      - User
+ *    description: Create a user
+ *    summary: Create a user
  *    operationId: createUser
  *    requestBody:
- *      description: User to create
+ *      description: A JSON object containing user information
  *      required: true
  *      content:
  *        application/json:
@@ -47,7 +61,7 @@ const verifyUserIdentity = (req, res, next) => {
  *            $ref: "#/components/schemas/User"
  *    responses:
  *      201:
- *        description: Created user
+ *        description: Create a user and return created user object
  *        content:
  *          application/json:
  *            schema:
@@ -70,12 +84,13 @@ router.post("/", (req, res) => {
  * /users:
  *  get:
  *    tags:
- *      - user
+ *      - User
+ *    description: Get all users
  *    summary: Get all users
  *    operationId: getUsers
  *    responses:
  *      200:
- *        description: All users
+ *        description: Return all user objects
  *        content:
  *          application/json:
  *            schema:
@@ -109,19 +124,20 @@ router.post("/:id", (req, res) => {
  * /users/{id}:
  *  get:
  *    tags:
- *      - user
- *    summary: Find user
+ *      - User
+ *    description: Find a user
+ *    summary: Find a user
  *    operationId: findUser
  *    parameters:
  *      - name: id
  *        in: path
+ *        description: userId
  *        required: true
- *        description: user to select
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: Found user
+ *        description: Return found user object
  *        content:
  *          application/json:
  *            schema:
@@ -129,7 +145,7 @@ router.post("/:id", (req, res) => {
  *              items:
  *                $ref: "#/components/schemas/User"
  *      404:
- *        description: Not Found
+ *        description: Not found
  */
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
@@ -150,13 +166,14 @@ router.put("/:id", (req, res) => {
  * /users/{id}:
  *  patch:
  *    tags:
- *      - user
- *    summary: Update user
+ *      - User
+ *    description: Update a user
+ *    summary: Update a user
  *    operationId: updateUser
  *    parameters:
  *      - name: id
  *        in: path
- *        description: user to update
+ *        description: userId
  *        required: true
  *        schema:
  *          type: string
@@ -164,18 +181,10 @@ router.put("/:id", (req, res) => {
  *      content:
  *        application/json:
  *          schema:
- *            type: object
- *            properties:
- *              password:
- *                type: string
- *                format: password
- *                example: password
- *              name:
- *                type: string
- *                example: name
+ *            $ref: "#/components/schemas/User"
  *    responses:
  *      200:
- *        description: Updated user
+ *        description: Update a user and return updated user object
  *        content:
  *          application/json:
  *            schema:
@@ -185,9 +194,9 @@ router.put("/:id", (req, res) => {
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not Found
+ *        description: Not found
  *    security:
- *      - jwtToken: []
+ *      - bearerAuth: []
  */
 router.patch("/:id", verifyUserIdentity, (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -204,13 +213,14 @@ router.patch("/:id", verifyUserIdentity, (req, res) => {
  * /users/{id}:
  *  delete:
  *    tags:
- *      - user
- *    summary: Delete user
+ *      - User
+ *    description: Delete a user
+ *    summary: Delete a user
  *    operationId: deleteUser
  *    parameters:
  *      - name: id
  *        in: path
- *        description: user to delete
+ *        description: userId
  *        required: true
  *        schema:
  *          type: string
@@ -220,9 +230,9 @@ router.patch("/:id", verifyUserIdentity, (req, res) => {
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not Found
+ *        description: Not found
  *    security:
- *      - jwtToken: []
+ *      - bearerAuth: []
  */
 router.delete(
   "/:id",
@@ -244,13 +254,14 @@ router.delete(
  * /users/{id}/ratings:
  *  post:
  *    tags:
- *      - user
- *    summary: Rate user
+ *      - User
+ *    description: Rate a user
+ *    summary: Rate a user
  *    operationId: rateUser
  *    parameters:
  *      - name: id
  *        in: path
- *        description: user id
+ *        description: userId
  *        required: true
  *        schema:
  *          type: string
@@ -272,13 +283,13 @@ router.delete(
  *      201:
  *        description: Successfully rate user
  *      204:
- *        description: Successfully update user rating
+ *        description: Successfully update user's rating
  *      401:
  *        description: Unauthorized
  *      404:
- *        description: Not Found
+ *        description: Not found
  *    security:
- *      - jwtToken: []
+ *      - bearerAuth: []
  */
 router.post(
   "/:id/ratings",
@@ -332,20 +343,22 @@ router.post(
  * /users/{id}/rating:
  *  get:
  *    tags:
- *      - user
- *    summary: Get user rating
+ *      - User
+ *    description: Get user's rating
+ *    summary: Get user's rating
  *    operationId: userRating
  *    parameters:
  *      - name: id
  *        in: path
+ *        description: userId
  *        required: true
  *        schema:
  *          type: string
  *    responses:
  *      200:
- *        description: User rating
+ *        description: Return user's rating
  *      404:
- *        description: Not Found
+ *        description: Not found
  */
 router.get("/:id/rating", (req, res) => {
   User.findById(req.params.id)
