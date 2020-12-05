@@ -72,7 +72,7 @@ const verifyUserIdentity = (req, res, next) => {
 router.post("/", (req, res) => {
   User.create(req.body)
     .then((user) => {
-      res.sendStatus(201);
+      res.status(201).json(user);
     })
     .catch((error) => {
       res.status(400).send(error.message);
