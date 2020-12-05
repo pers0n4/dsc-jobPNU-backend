@@ -1,5 +1,9 @@
 {
-  "ext": "js",
+  "ext": "*.js",
   "verbose": true,
-  "delay": "500ms"
+  "ignore": ["*.test.js"],
+  "delay": "1000ms",
+  "env": {
+    "NODE_ENV": "development"
+  }
 }
