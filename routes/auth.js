@@ -3,7 +3,6 @@ const router = express.Router();
 
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-require("../config/env");
 
 /**
  * @openapi
