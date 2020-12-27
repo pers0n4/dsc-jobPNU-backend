@@ -4,7 +4,10 @@ if (process.env.NODE_ENV === "production") {
   require("dotenv").config({
     path: path.resolve(process.cwd(), ".env.production"),
   });
-} else if (process.env.NODE_ENV === "development") {
+} else if (
+  process.env.NODE_ENV === "development" ||
+  process.env.NODE_ENV === "test"
+) {
   require("dotenv").config({
     path: path.resolve(process.cwd(), ".env.development"),
     debug: true,
