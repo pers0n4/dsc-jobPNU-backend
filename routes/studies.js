@@ -4,12 +4,7 @@ const express = require("express");
 const router = express.Router();
 const Study = require("../models/study");
 
-const verifyStudyIdentity = (req, res, next) => {
-  if (req.study.id !== req.params.id) {
-    return res.sendStatus(401);
-  }
-  next();
-};
+
 
 /**
  * @openapi
@@ -163,7 +158,7 @@ router.put("/:id", (req, res) => {
   res.sendStatus(405);
 });
 
-router.patch("/:id", verifyStudyIdentity, (req, res) => {
+router.patch("/:id", (req, res) => {
   Study.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((study) => {
       res.status(200).json(study);
