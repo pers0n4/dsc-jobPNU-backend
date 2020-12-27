@@ -4,6 +4,8 @@ const express = require("express");
 const router = express.Router();
 const Study = require("../models/study");
 
+
+
 /**
  * @openapi
  * components:
@@ -109,6 +111,18 @@ router.get("/", async (req, res) => {
   res.status(200).json(studies);
 });
 
+router.put("/", (req, res) => {
+  res.sendStatus(405);
+});
+
+router.patch("/", (req, res) => {
+  res.sendStatus(405);
+});
+
+router.delete("/", (req, res) => {
+  res.sendStatus(405);
+});
+
 /**
  * @openapi
  * /studies/{id}:
@@ -139,6 +153,39 @@ router.get("/:id", function (req, res) {
     res.status(200).json(study);
   });
 });
+
+router.put("/:id", (req, res) => {
+  res.sendStatus(405);
+});
+
+router.patch("/:id", (req, res) => {
+  Study.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((study) => {
+      res.status(200).json(study);
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+});
+
+router.delete(
+  "/:id",
+  (req, res) => {
+    Study.findByIdAndDelete(req.params.id)
+      .then(() => {
+        res.sendStatus(204);
+      })
+      .catch((error) => {
+        res.status(404).send(error.message);
+      });
+  }
+);
+
+// router.delete("/:id", function (req, res) {
+//   Study.findById(req.params.id).then((study) => {
+//     res.status(200).json(study);
+//   });
+// });
 
 /**
  * @openapi

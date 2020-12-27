@@ -12,10 +12,13 @@ const pointSchema = mongoose.Schema({
     type: [Number],
     required: true,
   },
+  title : {
+    type : String
+  }
 });
 //member
 const memberSchema = mongoose.Schema({
-  member: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true, unique : true },
+  member: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true},
   status: { type : String }
 });
 
