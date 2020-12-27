@@ -72,7 +72,7 @@ const verifyUserIdentity = (req, res, next) => {
 router.post("/", (req, res) => {
   User.create(req.body)
     .then((user) => {
-      res.sendStatus(201);
+      res.status(201).json(user);
     })
     .catch((error) => {
       res.status(400).send(error.message);
@@ -198,15 +198,20 @@ router.put("/:id", (req, res) => {
  *    security:
  *      - bearerAuth: []
  */
-router.patch("/:id", verifyUserIdentity, (req, res) => {
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then((user) => {
-      res.status(200).json(user);
-    })
-    .catch((error) => {
-      res.status(404).send(error.message);
-    });
-});
+router.patch(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  verifyUserIdentity,
+  (req, res) => {
+    User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((error) => {
+        res.status(404).send(error.message);
+      });
+  }
+);
 
 /**
  * @openapi

@@ -1,6 +1,5 @@
 const { Strategy: LocalStrategy } = require("passport-local");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-require("./env");
 
 const User = require("../models/user");
 
